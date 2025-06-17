@@ -1,27 +1,47 @@
-// Function to check the user's answer
-function checkAnswer() {
-    // Define the correct answer
-    const correctAnswer = "4";
+document.addEventListener("DOMContentLoaded", function () {
+    // Select the form and feedback division
+    const form = document.getElementById("registration-form");
+    const feedbackDiv = document.getElementById("form-feedback");
 
-    // Retrieve the selected radio button value
-    const selectedOption = document.querySelector('input[name="quiz"]:checked');
+    // Add event listener to the form
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent form submission
 
-    // Check if the user selected an option
-    if (selectedOption) {
-        const userAnswer = selectedOption.value;
+        // Retrieve and trim input values
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
 
-        // Compare user answer with the correct answer
-        const feedback = document.getElementById("feedback");
-        if (userAnswer === correctAnswer) {
-            feedback.textContent = "Correct! Well done.";
-        } else {
-            feedback.textContent = "That's incorrect. Try again!";
+        // Initialize validation status and message list
+        let isValid = true;
+        let messages = [];
+
+        // Username validation
+        if (username.length < 3) {
+            isValid = false;
+            messages.push("Username must be at least 3 characters long.");
         }
-    } else {
-        // If no option is selected
-        document.getElementById("feedback").textContent = "Please select an answer.";
-    }
-}
 
-// Add event listener to the submit button
-document.getElementById("submit-answer").addEventListener("click", checkAnswer);
+        // Email validation
+        if (!email.includes("@") || !email.includes(".")) {
+            isValid = false;
+            messages.push("Email must contain '@' and '.' characters.");
+        }
+
+        // Password validation
+        if (password.length < 8) {
+            isValid = false;
+            messages.push("Password must be at least 8 characters long.");
+        }
+
+        // Display feedback
+        feedbackDiv.style.display = "block";
+        if (isValid) {
+            feedbackDiv.textContent = "Registration successful!";
+            feedbackDiv.style.color = "#28a745"; // Green
+        } else {
+            feedbackDiv.innerHTML = messages.join("<br>");
+            feedbackDiv.style.color = "#dc3545"; // Red
+        }
+    });
+});
